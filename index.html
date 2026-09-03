@@ -23,37 +23,50 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: var(--sans); background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
-  #auth-gate { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 9999; }
-  .auth-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 40px; width: 340px; text-align: center; }
-  .auth-box h1 { font-size: 20px; font-weight: 600; margin-bottom: 6px; letter-spacing: -0.3px; }
+
+  /* ── Auth ── */
+  #auth-gate { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
+  .auth-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 40px; width: 100%; max-width: 340px; text-align: center; }
+  .auth-box h1 { font-size: 20px; font-weight: 600; margin-bottom: 6px; }
   .auth-box p { color: var(--text-dim); font-size: 13px; margin-bottom: 28px; }
-  .auth-box input { width: 100%; padding: 10px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: var(--mono); font-size: 14px; margin-bottom: 12px; outline: none; transition: border-color 0.15s; }
+  .auth-box input { width: 100%; padding: 10px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; margin-bottom: 12px; outline: none; }
   .auth-box input:focus { border-color: var(--accent); }
   .auth-error { color: var(--red); font-size: 12px; margin-bottom: 12px; display: none; }
+
+  /* ── App shell ── */
   #app { display: none; flex-direction: column; height: 100vh; }
-  header { display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 52px; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; }
-  .header-left { display: flex; align-items: center; gap: 10px; }
-  .logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+
+  /* ── Header ── */
+  header { display: flex; align-items: center; justify-content: space-between; padding: 0 16px; height: 52px; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; gap: 10px; }
+  .header-left { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; flex-shrink: 0; }
   @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-  header h1 { font-size: 15px; font-weight: 600; letter-spacing: -0.2px; }
-  .header-status { font-family: var(--mono); font-size: 11px; color: var(--text-dim); }
-  nav { display: flex; gap: 4px; }
-  nav button { padding: 6px 14px; background: transparent; border: none; color: var(--text-dim); font-family: var(--sans); font-size: 13px; font-weight: 500; border-radius: 6px; cursor: pointer; transition: all 0.15s; }
+  header h1 { font-size: 14px; font-weight: 600; white-space: nowrap; }
+  .header-status { font-family: var(--mono); font-size: 10px; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* ── Nav ── */
+  nav { display: flex; gap: 2px; overflow-x: auto; flex-shrink: 0; }
+  nav::-webkit-scrollbar { display: none; }
+  nav button { padding: 6px 12px; background: transparent; border: none; color: var(--text-dim); font-family: var(--sans); font-size: 13px; font-weight: 500; border-radius: 6px; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
   nav button:hover { color: var(--text); background: var(--border); }
   nav button.active { color: var(--accent); background: var(--accent-dim); }
+
+  /* ── Main layout ── */
   .main { display: flex; flex: 1; overflow: hidden; }
-  .sidebar { width: 320px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; flex-shrink: 0; }
-  .sidebar-section { padding: 16px; border-bottom: 1px solid var(--border); }
-  .sidebar-section h2 { font-size: 11px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; }
+
+  /* ── Sidebar — desktop only ── */
+  .sidebar { width: 300px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; flex-shrink: 0; }
+  .sidebar-section { padding: 14px; border-bottom: 1px solid var(--border); }
+  .sidebar-section h2 { font-size: 10px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
   .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .stat { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
   .stat-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 4px; }
-  .stat-value { font-family: var(--mono); font-size: 16px; font-weight: 500; color: var(--text); }
+  .stat-value { font-family: var(--mono); font-size: 16px; font-weight: 500; }
   .stat-value.green { color: var(--green); }
   .stat-value.amber { color: var(--amber); }
   .stat-value.red { color: var(--red); }
   .event-log { flex: 1; overflow-y: auto; padding: 8px; }
-  .event-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px; border-radius: 8px; margin-bottom: 4px; transition: background 0.1s; }
+  .event-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px; border-radius: 8px; margin-bottom: 4px; }
   .event-item:hover { background: var(--bg); }
   .event-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
   .event-dot.green { background: var(--green); }
@@ -64,60 +77,98 @@
   .event-type { font-size: 12px; font-weight: 500; margin-bottom: 2px; }
   .event-detail { font-size: 11px; color: var(--text-dim); font-family: var(--mono); }
   .event-time { font-size: 10px; color: var(--text-dim); font-family: var(--mono); flex-shrink: 0; }
+
+  /* ── Map ── */
+  .map-view { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
   #map { flex: 1; }
-  .panel { display: none; flex-direction: column; flex: 1; overflow-y: auto; padding: 24px; gap: 20px; }
-  .panel-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-  .panel-card h2 { font-size: 14px; font-weight: 600; margin-bottom: 16px; letter-spacing: -0.2px; }
+  .playback-controls { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--surface); border-top: 1px solid var(--border); flex-shrink: 0; flex-wrap: wrap; }
+  .playback-controls button { padding: 6px 10px; background: var(--accent-dim); border: 1px solid var(--accent); color: var(--accent); border-radius: 6px; font-size: 12px; cursor: pointer; white-space: nowrap; }
+  .playback-slider { flex: 1; min-width: 80px; accent-color: var(--accent); }
+  .playback-label { font-family: var(--mono); font-size: 10px; color: var(--text-dim); white-space: nowrap; }
+  .date-input { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text); padding: 4px 8px; font-size: 12px; outline: none; }
+  .clear-btn { padding: 5px 8px; background: transparent; border: 1px solid var(--border); color: var(--text-dim); border-radius: 6px; font-size: 12px; cursor: pointer; white-space: nowrap; }
+
+  /* ── Panels ── */
+  .panel { display: none; flex-direction: column; flex: 1; overflow-y: auto; padding: 16px; gap: 16px; }
+  .panel-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+  .panel-card h2 { font-size: 14px; font-weight: 600; margin-bottom: 14px; }
+
+  /* ── Mobile status bar ── */
+  .mobile-status { display: none; padding: 12px 14px; background: var(--surface); border-bottom: 1px solid var(--border); }
+  .mobile-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .mobile-stat { text-align: center; }
+  .mobile-stat-label { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+  .mobile-stat-value { font-family: var(--mono); font-size: 14px; font-weight: 500; margin-top: 2px; }
+
+  /* ── Zones ── */
   .zone-list { display: flex; flex-direction: column; gap: 8px; }
-  .zone-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; }
+  .zone-item { display: flex; align-items: center; gap: 10px; padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; }
   .zone-color { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
-  .zone-info { flex: 1; }
+  .zone-info { flex: 1; min-width: 0; }
   .zone-name { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
-  .zone-coords { font-family: var(--mono); font-size: 10px; color: var(--text-dim); }
-  .zone-actions { display: flex; gap: 6px; }
-  .btn-icon { width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: var(--text-dim); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; transition: all 0.15s; }
+  .zone-coords { font-family: var(--mono); font-size: 10px; color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .zone-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .btn-icon { width: 30px; height: 30px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: var(--text-dim); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; }
   .btn-icon:hover { border-color: var(--accent); color: var(--accent); }
   .btn-icon.danger:hover { border-color: var(--red); color: var(--red); }
-  .zone-form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
-  .zone-form input { padding: 8px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: var(--mono); font-size: 12px; outline: none; transition: border-color 0.15s; }
+  .zone-form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+  .zone-form input { padding: 9px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 13px; outline: none; }
   .zone-form input:focus { border-color: var(--accent); }
-  .zone-form input.full { grid-column: span 2; font-family: var(--sans); font-size: 13px; }
-  .settings-list { display: flex; flex-direction: column; gap: 2px; }
-  .setting-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .zone-form input.full { grid-column: span 2; }
+
+  /* ── Settings ── */
+  .settings-list { display: flex; flex-direction: column; }
+  .setting-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); gap: 12px; }
   .setting-item:last-child { border-bottom: none; }
-  .setting-label { font-size: 13px; }
+  .setting-label { font-size: 13px; font-weight: 500; }
   .setting-desc { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
-  .toggle { position: relative; width: 36px; height: 20px; flex-shrink: 0; }
+  .toggle { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
   .toggle input { opacity: 0; width: 0; height: 0; }
-  .toggle-track { position: absolute; inset: 0; background: var(--border); border-radius: 10px; cursor: pointer; transition: background 0.2s; }
-  .toggle-track::after { content: ''; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; background: white; border-radius: 50%; transition: transform 0.2s; }
+  .toggle-track { position: absolute; inset: 0; background: var(--border); border-radius: 11px; cursor: pointer; transition: background 0.2s; }
+  .toggle-track::after { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; background: white; border-radius: 50%; transition: transform 0.2s; }
   .toggle input:checked + .toggle-track { background: var(--accent); }
-  .toggle input:checked + .toggle-track::after { transform: translateX(16px); }
-  .btn { padding: 8px 16px; border-radius: 8px; font-family: var(--sans); font-size: 13px; font-weight: 500; cursor: pointer; border: none; transition: all 0.15s; }
+  .toggle input:checked + .toggle-track::after { transform: translateX(18px); }
+
+  /* ── Buttons ── */
+  .btn { padding: 9px 16px; border-radius: 8px; font-family: var(--sans); font-size: 13px; font-weight: 500; cursor: pointer; border: none; }
   .btn-primary { background: var(--accent); color: white; }
-  .btn-primary:hover { background: #2563eb; }
   .btn-secondary { background: transparent; color: var(--text-dim); border: 1px solid var(--border); }
-  .btn-secondary:hover { color: var(--text); border-color: var(--text-dim); }
-  .playback-controls { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--surface); border-top: 1px solid var(--border); flex-shrink: 0; }
-  .playback-controls button { padding: 6px 12px; background: var(--accent-dim); border: 1px solid var(--accent); color: var(--accent); border-radius: 6px; font-size: 12px; cursor: pointer; font-family: var(--sans); }
-  .playback-slider { flex: 1; accent-color: var(--accent); }
-  .playback-label { font-family: var(--mono); font-size: 11px; color: var(--text-dim); min-width: 140px; text-align: right; }
-  .date-input { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text); padding: 4px 8px; font-size: 12px; font-family: var(--mono); outline: none; }
-  .clear-btn { padding: 5px 10px; background: transparent; border: 1px solid var(--border); color: var(--text-dim); border-radius: 6px; font-size: 12px; cursor: pointer; font-family: var(--sans); }
-  .clear-btn:hover { color: var(--text); border-color: var(--text-dim); }
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; }
+
+  /* ── Modal ── */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: flex-end; justify-content: center; padding: 0; }
   .modal-overlay.open { display: flex; }
-  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; width: 400px; max-width: 90vw; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px 16px 0 0; padding: 24px; width: 100%; max-width: 500px; }
   .modal h3 { font-size: 15px; font-weight: 600; margin-bottom: 16px; }
   .modal-form { display: flex; flex-direction: column; gap: 10px; }
-  .modal-form input { padding: 9px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 13px; outline: none; }
+  .modal-form input { padding: 10px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; outline: none; }
   .modal-form input:focus { border-color: var(--accent); }
-  .modal-form label { font-size: 11px; color: var(--text-dim); margin-bottom: -6px; }
-  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px; }
-  ::-webkit-scrollbar { width: 4px; }
+  .modal-form label { font-size: 11px; color: var(--text-dim); }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
+
+  /* ── Events table mobile ── */
+  .events-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-  .map-view { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+
+  /* ── MOBILE BREAKPOINT ── */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .mobile-status { display: block; }
+    header { padding: 0 12px; }
+    header h1 { font-size: 13px; }
+    .header-status { display: none; }
+    nav button { font-size: 12px; padding: 6px 10px; }
+    .panel { padding: 12px; gap: 12px; }
+    .panel-card { padding: 14px; }
+    .playback-controls { padding: 8px 12px; gap: 6px; }
+    .playback-label { display: none; }
+    .modal-overlay { align-items: flex-end; }
+    .modal { border-radius: 16px 16px 0 0; }
+    .zone-form { grid-template-columns: 1fr; }
+    .zone-form input.full { grid-column: span 1; }
+  }
 </style>
 </head>
 <body>
@@ -147,37 +198,47 @@
     <div class="header-status" id="last-update">Loading...</div>
   </header>
 
+  <!-- Mobile status bar (hidden on desktop) -->
+  <div class="mobile-status" id="mobile-status">
+    <div class="mobile-stats">
+      <div class="mobile-stat">
+        <div class="mobile-stat-label">Speed</div>
+        <div class="mobile-stat-value" id="m-speed">—</div>
+      </div>
+      <div class="mobile-stat">
+        <div class="mobile-stat-label">Zone</div>
+        <div class="mobile-stat-value" id="m-zone" style="font-size:11px;margin-top:4px">—</div>
+      </div>
+      <div class="mobile-stat">
+        <div class="mobile-stat-label">Sats</div>
+        <div class="mobile-stat-value" id="m-sats">—</div>
+      </div>
+      <div class="mobile-stat">
+        <div class="mobile-stat-label">HDOP</div>
+        <div class="mobile-stat-value" id="m-hdop">—</div>
+      </div>
+    </div>
+  </div>
+
   <div class="main">
+    <!-- Desktop sidebar -->
     <div class="sidebar">
       <div class="sidebar-section">
         <h2>Live Status</h2>
         <div class="stats-grid">
-          <div class="stat">
-            <div class="stat-label">Speed</div>
-            <div class="stat-value" id="stat-speed">—</div>
-          </div>
-          <div class="stat">
-            <div class="stat-label">Zone</div>
-            <div class="stat-value" id="stat-zone">—</div>
-          </div>
-          <div class="stat">
-            <div class="stat-label">Satellites</div>
-            <div class="stat-value" id="stat-sats">—</div>
-          </div>
-          <div class="stat">
-            <div class="stat-label">HDOP</div>
-            <div class="stat-value" id="stat-hdop">—</div>
-          </div>
+          <div class="stat"><div class="stat-label">Speed</div><div class="stat-value" id="stat-speed">—</div></div>
+          <div class="stat"><div class="stat-label">Zone</div><div class="stat-value" id="stat-zone" style="font-size:13px">—</div></div>
+          <div class="stat"><div class="stat-label">Satellites</div><div class="stat-value" id="stat-sats">—</div></div>
+          <div class="stat"><div class="stat-label">HDOP</div><div class="stat-value" id="stat-hdop">—</div></div>
         </div>
       </div>
-      <div class="sidebar-section" style="padding-bottom:8px">
-        <h2>Recent Events</h2>
-      </div>
+      <div class="sidebar-section" style="padding-bottom:8px"><h2>Recent Events</h2></div>
       <div class="event-log" id="event-log">
-        <div style="padding:20px;text-align:center;color:var(--text-dim);font-size:12px">Loading events...</div>
+        <div style="padding:20px;text-align:center;color:var(--text-dim);font-size:12px">Loading...</div>
       </div>
     </div>
 
+    <!-- Map tab -->
     <div class="map-view" id="tab-map" style="display:flex">
       <div id="map"></div>
       <div class="playback-controls">
@@ -189,6 +250,7 @@
       </div>
     </div>
 
+    <!-- Geofences tab -->
     <div class="panel" id="tab-geofences">
       <div class="panel-card">
         <h2>Geofence Zones</h2>
@@ -200,25 +262,30 @@
           <input id="zone-lat" placeholder="Latitude" type="number" step="any">
           <input id="zone-lon" placeholder="Longitude" type="number" step="any">
           <input id="zone-radius" placeholder="Radius (m)" type="number" value="100">
-          <button class="btn btn-secondary" onclick="useMapCenter()">📍 Use map center</button>
+          <button class="btn btn-secondary" onclick="useMapCenter()">📍 Map center</button>
           <button class="btn btn-primary" onclick="addZone()">Add Zone</button>
         </div>
       </div>
     </div>
 
+    <!-- Notifications tab -->
     <div class="panel" id="tab-notifications">
       <div class="panel-card">
         <h2>Notification Settings</h2>
         <div class="settings-list" id="settings-list">
-          <div style="color:var(--text-dim);font-size:13px">Loading settings...</div>
+          <div style="color:var(--text-dim);font-size:13px">Loading...</div>
         </div>
       </div>
     </div>
 
+    <!-- Events tab -->
     <div class="panel" id="tab-events">
       <div class="panel-card">
         <h2>Event Log</h2>
-        <div id="events-table">
+        <!-- Mobile event list -->
+        <div id="events-mobile" style="display:none;flex-direction:column;gap:8px"></div>
+        <!-- Desktop table -->
+        <div class="events-scroll" id="events-table">
           <div style="color:var(--text-dim);font-size:13px">Loading events...</div>
         </div>
       </div>
@@ -226,6 +293,7 @@
   </div>
 </div>
 
+<!-- Edit Zone Modal -->
 <div class="modal-overlay" id="edit-modal">
   <div class="modal">
     <h3>Edit Zone</h3>
@@ -253,6 +321,7 @@ const PASSWORD   = "Abe123#$";
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyKfpu6nlhMq3r2HBBlEMAkGWfjG_qtiWINZX2B8qYkdHYA2gz-gtS4p-_2-6yEDtalDg/exec";
 const DEVICE_KEY = "change_this_secret_key";
 const REFRESH_MS = 15000;
+const isMobile   = () => window.innerWidth <= 768;
 
 // ── Auth ──────────────────────────────────────────────────────
 function login() {
@@ -265,7 +334,7 @@ function login() {
   }
 }
 
-// ── JSONP fetch ───────────────────────────────────────────────
+// ── JSONP ─────────────────────────────────────────────────────
 function apiFetch(params) {
   return new Promise((resolve, reject) => {
     const cbName = 'cb_' + Date.now() + '_' + Math.random().toString(36).slice(2);
@@ -273,16 +342,8 @@ function apiFetch(params) {
     const url = SCRIPT_URL + '?' + new URLSearchParams(params);
     const script = document.createElement('script');
     script.src = url;
-    window[cbName] = (data) => {
-      delete window[cbName];
-      document.body.removeChild(script);
-      resolve(data);
-    };
-    script.onerror = () => {
-      delete window[cbName];
-      document.body.removeChild(script);
-      reject(new Error('JSONP failed'));
-    };
+    window[cbName] = (data) => { delete window[cbName]; document.body.removeChild(script); resolve(data); };
+    script.onerror = () => { delete window[cbName]; document.body.removeChild(script); reject(new Error('JSONP failed')); };
     document.body.appendChild(script);
   });
 }
@@ -290,11 +351,7 @@ function apiFetch(params) {
 async function apiPost(body) {
   body.device_key = DEVICE_KEY;
   try {
-    const r = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify(body),
-      headers: { 'Content-Type': 'application/json' }
-    });
+    const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } });
     return r.json();
   } catch(e) { console.error('POST error', e); }
 }
@@ -308,15 +365,14 @@ function switchTab(tab, btn) {
   document.getElementById('tab-notifications').style.display = tab === 'notifications' ? 'flex' : 'none';
   document.getElementById('tab-events').style.display        = tab === 'events'        ? 'flex' : 'none';
   if (tab === 'map') setTimeout(() => map.invalidateSize(), 50);
+  if (tab === 'events') renderEventsMobile();
 }
 
 // ── Map ───────────────────────────────────────────────────────
 let map, routeLine, liveMarker, historyMarker;
 let gpsPoints = [];
 let geofenceCircles = [];
-let isPlaying = false;
-let playIndex = 0;
-let playTimer = null;
+let isPlaying = false, playIndex = 0, playTimer = null;
 
 function initMap() {
   map = L.map('map', { zoomControl: false }).setView([43.2581, -79.8682], 14);
@@ -331,48 +387,45 @@ function updateMap(points) {
   if (routeLine) map.removeLayer(routeLine);
   const coords = points.map(p => [+p.lat, +p.lon]).filter(c => c[0] && c[1]);
   if (!coords.length) return;
-
   routeLine = L.polyline(coords, { color: '#3b82f6', weight: 3, opacity: 0.7 }).addTo(map);
-
   const latest = points[points.length - 1];
   if (liveMarker) map.removeLayer(liveMarker);
-  liveMarker = L.circleMarker([+latest.lat, +latest.lon], {
-    radius: 10, color: '#22c55e', fillColor: '#22c55e', fillOpacity: 1, weight: 3
-  }).addTo(map);
+  liveMarker = L.circleMarker([+latest.lat, +latest.lon], { radius: 10, color: '#22c55e', fillColor: '#22c55e', fillOpacity: 1, weight: 3 }).addTo(map);
   liveMarker.bindPopup(`<b>Latest</b><br>${(+latest.lat).toFixed(5)}, ${(+latest.lon).toFixed(5)}<br>Speed: ${latest.speed_kmph} km/h<br>Zone: ${latest.geofence}`);
 
-  document.getElementById('stat-speed').textContent = (+latest.speed_kmph || 0).toFixed(0) + ' km/h';
-  document.getElementById('stat-speed').className = 'stat-value ' + (+latest.speed_kmph > 120 ? 'red' : +latest.speed_kmph > 5 ? 'green' : '');
-  document.getElementById('stat-zone').textContent = latest.geofence || '—';
-  document.getElementById('stat-sats').textContent = latest.satellites || '—';
-  document.getElementById('stat-hdop').textContent = (+latest.hdop || 0).toFixed(1);
+  const spd = (+latest.speed_kmph || 0).toFixed(0) + ' km/h';
+  const spdClass = +latest.speed_kmph > 120 ? 'red' : +latest.speed_kmph > 5 ? 'green' : '';
+  const zone = latest.geofence || '—';
+  const sats = latest.satellites || '—';
+  const hdop = (+latest.hdop || 0).toFixed(1);
+
+  document.getElementById('stat-speed').textContent = spd;
+  document.getElementById('stat-speed').className = 'stat-value ' + spdClass;
+  document.getElementById('stat-zone').textContent = zone;
+  document.getElementById('stat-sats').textContent = sats;
+  document.getElementById('stat-hdop').textContent = hdop;
+  document.getElementById('m-speed').textContent = spd;
+  document.getElementById('m-zone').textContent = zone;
+  document.getElementById('m-sats').textContent = sats;
+  document.getElementById('m-hdop').textContent = hdop;
   document.getElementById('last-update').textContent = 'Updated ' + formatTime(new Date().toISOString());
 
   const slider = document.getElementById('playback-slider');
   slider.max = coords.length - 1;
   if (!isPlaying) slider.value = coords.length - 1;
-
-  if (coords.length) map.fitBounds(routeLine.getBounds(), { padding: [20, 20] });
+  if (coords.length > 1) map.fitBounds(routeLine.getBounds(), { padding: [20, 20] });
 }
 
-// ── Date filter ───────────────────────────────────────────────
 function filterByDate(dateStr) {
   if (!dateStr) { clearDateFilter(); return; }
-
   const filtered = gpsPoints.filter(p => {
     const ts = p.gps_timestamp || p.timestamp;
     if (!ts) return false;
     const d = new Date(ts);
     if (isNaN(d)) return false;
-    const pointDate = d.toISOString().split('T')[0];
-    return pointDate === dateStr;
+    return d.toISOString().split('T')[0] === dateStr;
   });
-
-  if (!filtered.length) {
-    alert('No GPS points found for ' + dateStr);
-    return;
-  }
-
+  if (!filtered.length) { alert('No GPS points for ' + dateStr); return; }
   updateMap(filtered);
 }
 
@@ -381,7 +434,6 @@ function clearDateFilter() {
   updateMap(gpsPoints);
 }
 
-// ── Playback ──────────────────────────────────────────────────
 function togglePlayback() {
   isPlaying = !isPlaying;
   document.getElementById('play-btn').textContent = isPlaying ? '⏸ Pause' : '▶ Play';
@@ -390,37 +442,26 @@ function togglePlayback() {
 }
 
 function stepPlayback() {
-  if (playIndex >= gpsPoints.length - 1) {
-    isPlaying = false;
-    document.getElementById('play-btn').textContent = '▶ Play';
-    clearInterval(playTimer);
-    return;
-  }
-  seekPlayback(playIndex);
-  playIndex++;
+  if (playIndex >= gpsPoints.length - 1) { isPlaying = false; document.getElementById('play-btn').textContent = '▶ Play'; clearInterval(playTimer); return; }
+  seekPlayback(playIndex); playIndex++;
 }
 
 function seekPlayback(idx) {
   const p = gpsPoints[idx];
   if (!p || !p.lat) return;
   if (historyMarker) map.removeLayer(historyMarker);
-  historyMarker = L.circleMarker([+p.lat, +p.lon], {
-    radius: 8, color: '#f59e0b', fillColor: '#f59e0b', fillOpacity: 1, weight: 2
-  }).addTo(map);
+  historyMarker = L.circleMarker([+p.lat, +p.lon], { radius: 8, color: '#f59e0b', fillColor: '#f59e0b', fillOpacity: 1, weight: 2 }).addTo(map);
   map.panTo([+p.lat, +p.lon]);
   document.getElementById('playback-slider').value = idx;
   document.getElementById('playback-label').textContent = formatTime(p.gps_timestamp || p.timestamp) + ' · ' + (+p.speed_kmph || 0).toFixed(0) + ' km/h';
 }
 
-// ── Geofence circles ──────────────────────────────────────────
 function drawGeofenceCircles(zones) {
   geofenceCircles.forEach(c => map.removeLayer(c));
   geofenceCircles = [];
   zones.forEach(z => {
     if (!z.lat || !z.lon) return;
-    const circle = L.circle([+z.lat, +z.lon], {
-      radius: +z.radius_m || 100, color: '#3b82f6', fillColor: '#3b82f6', fillOpacity: 0.08, weight: 1.5
-    }).addTo(map);
+    const circle = L.circle([+z.lat, +z.lon], { radius: +z.radius_m || 100, color: '#3b82f6', fillColor: '#3b82f6', fillOpacity: 0.08, weight: 1.5 }).addTo(map);
     circle.bindPopup(`<b>${z.name}</b><br>${z.radius_m}m radius`);
     geofenceCircles.push(circle);
   });
@@ -438,73 +479,86 @@ async function loadGpsData() {
     const data = await apiFetch({ action: 'get_gps' });
     gpsPoints = Array.isArray(data) ? data.filter(p => p.lat && p.lon) : [];
     const dateFilter = document.getElementById('date-filter').value;
-    if (dateFilter) {
-      filterByDate(dateFilter);
-    } else {
-      updateMap(gpsPoints);
-    }
+    if (dateFilter) filterByDate(dateFilter);
+    else updateMap(gpsPoints);
   } catch(e) { console.error('GPS load error', e); }
 }
 
 // ── Events ────────────────────────────────────────────────────
-const EVENT_COLORS = {
-  geofence_entry: 'green', geofence_exit: 'red', speed_alert: 'red',
-  moving: 'blue', stopped: 'amber', trip_start: 'green', trip_end: 'amber',
-};
-const EVENT_LABELS = {
-  geofence_entry: 'Entered zone', geofence_exit: 'Exited zone',
-  speed_alert: 'Speed alert', moving: 'Moving', stopped: 'Stopped',
-  trip_start: 'Trip started', trip_end: 'Trip ended',
-};
+const EVENT_COLORS = { geofence_entry:'green', geofence_exit:'red', speed_alert:'red', moving:'blue', stopped:'amber', trip_start:'green', trip_end:'amber' };
+const EVENT_LABELS = { geofence_entry:'Entered zone', geofence_exit:'Exited zone', speed_alert:'Speed alert', moving:'Moving', stopped:'Stopped', trip_start:'Trip started', trip_end:'Trip ended' };
+let allEvents = [];
 
 async function loadEvents() {
   try {
     const data = await apiFetch({ action: 'get_events' });
-    const arr = Array.isArray(data) ? data : [];
-    const recent = arr.slice(-20).reverse();
+    allEvents = Array.isArray(data) ? data : [];
+    renderEventsSidebar();
+    if (document.getElementById('tab-events').style.display !== 'none') renderEventsMobile();
+  } catch(e) { console.error('Events load error', e); }
+}
 
-    const log = document.getElementById('event-log');
-    log.innerHTML = recent.length ? recent.map(e => `
-      <div class="event-item">
-        <div class="event-dot ${EVENT_COLORS[e.event_type] || 'blue'}"></div>
-        <div class="event-content">
-          <div class="event-type">${EVENT_LABELS[e.event_type] || e.event_type}</div>
-          <div class="event-detail">${e.event_detail || ''} · ${e.geofence || ''}</div>
-        </div>
-        <div class="event-time">${formatTime(e.gps_timestamp || e.timestamp)}</div>
+function renderEventsSidebar() {
+  const recent = allEvents.slice(-20).reverse();
+  const log = document.getElementById('event-log');
+  log.innerHTML = recent.length ? recent.map(e => `
+    <div class="event-item">
+      <div class="event-dot ${EVENT_COLORS[e.event_type] || 'blue'}"></div>
+      <div class="event-content">
+        <div class="event-type">${EVENT_LABELS[e.event_type] || e.event_type}</div>
+        <div class="event-detail">${e.event_detail || ''} · ${e.geofence || ''}</div>
       </div>
-    `).join('') : '<div style="padding:20px;text-align:center;color:var(--text-dim);font-size:12px">No events yet</div>';
+      <div class="event-time">${formatTime(e.gps_timestamp || e.timestamp)}</div>
+    </div>
+  `).join('') : '<div style="padding:20px;text-align:center;color:var(--text-dim);font-size:12px">No events yet</div>';
+}
 
-    const table = document.getElementById('events-table');
+function renderEventsMobile() {
+  const mobile = document.getElementById('events-mobile');
+  const table  = document.getElementById('events-table');
+
+  if (isMobile()) {
+    mobile.style.display = 'flex';
+    table.style.display  = 'none';
+    const arr = allEvents.slice().reverse();
+    mobile.innerHTML = arr.length ? arr.map(e => `
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;display:flex;gap:10px;align-items:flex-start">
+        <div class="event-dot ${EVENT_COLORS[e.event_type] || 'blue'}" style="margin-top:3px"></div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:500">${EVENT_LABELS[e.event_type] || e.event_type}</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:2px">${e.event_detail || ''} · ${e.geofence || ''}</div>
+          <div style="font-size:10px;color:var(--text-dim);font-family:var(--mono);margin-top:4px">${formatTime(e.gps_timestamp || e.timestamp)}</div>
+          ${e.lat ? `<a href="https://maps.google.com/?q=${e.lat},${e.lon}" target="_blank" style="font-size:11px;color:var(--accent);text-decoration:none;display:block;margin-top:4px">View on map →</a>` : ''}
+        </div>
+      </div>
+    `).join('') : '<div style="color:var(--text-dim);font-size:13px">No events recorded yet</div>';
+  } else {
+    mobile.style.display = 'none';
+    table.style.display  = 'block';
+    const arr = allEvents.slice().reverse();
     table.innerHTML = arr.length ? `
       <table style="width:100%;border-collapse:collapse;font-size:12px">
-        <thead>
-          <tr style="color:var(--text-dim);text-align:left;border-bottom:1px solid var(--border)">
-            <th style="padding:8px 12px">Time</th>
-            <th style="padding:8px 12px">Type</th>
-            <th style="padding:8px 12px">Detail</th>
-            <th style="padding:8px 12px">Zone</th>
-            <th style="padding:8px 12px">Speed</th>
-            <th style="padding:8px 12px">Coords</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${arr.slice().reverse().map(e => `
-            <tr style="border-bottom:1px solid var(--border)">
-              <td style="padding:8px 12px;font-family:var(--mono);color:var(--text-dim);font-size:11px">${formatTime(e.gps_timestamp || e.timestamp)}</td>
-              <td style="padding:8px 12px">${EVENT_LABELS[e.event_type] || e.event_type}</td>
-              <td style="padding:8px 12px;color:var(--text-dim)">${e.event_detail || '—'}</td>
-              <td style="padding:8px 12px">${e.geofence || '—'}</td>
-              <td style="padding:8px 12px;font-family:var(--mono)">${e.speed_kmph ? (+e.speed_kmph).toFixed(0) + ' km/h' : '—'}</td>
-              <td style="padding:8px 12px;font-family:var(--mono);font-size:11px">
-                ${e.lat ? `<a href="https://maps.google.com/?q=${e.lat},${e.lon}" target="_blank" style="color:var(--accent);text-decoration:none">${(+e.lat).toFixed(4)}, ${(+e.lon).toFixed(4)}</a>` : '—'}
-              </td>
-            </tr>
-          `).join('')}
+        <thead><tr style="color:var(--text-dim);text-align:left;border-bottom:1px solid var(--border)">
+          <th style="padding:8px 12px">Time</th>
+          <th style="padding:8px 12px">Type</th>
+          <th style="padding:8px 12px">Detail</th>
+          <th style="padding:8px 12px">Zone</th>
+          <th style="padding:8px 12px">Speed</th>
+          <th style="padding:8px 12px">Coords</th>
+        </tr></thead>
+        <tbody>${arr.map(e => `
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:8px 12px;font-family:var(--mono);color:var(--text-dim);font-size:11px">${formatTime(e.gps_timestamp || e.timestamp)}</td>
+            <td style="padding:8px 12px">${EVENT_LABELS[e.event_type] || e.event_type}</td>
+            <td style="padding:8px 12px;color:var(--text-dim)">${e.event_detail || '—'}</td>
+            <td style="padding:8px 12px">${e.geofence || '—'}</td>
+            <td style="padding:8px 12px;font-family:var(--mono)">${e.speed_kmph ? (+e.speed_kmph).toFixed(0) + ' km/h' : '—'}</td>
+            <td style="padding:8px 12px;font-size:11px">${e.lat ? `<a href="https://maps.google.com/?q=${e.lat},${e.lon}" target="_blank" style="color:var(--accent);text-decoration:none">${(+e.lat).toFixed(4)}, ${(+e.lon).toFixed(4)}</a>` : '—'}</td>
+          </tr>`).join('')}
         </tbody>
       </table>
     ` : '<div style="color:var(--text-dim);font-size:13px;padding:12px 0">No events recorded yet</div>';
-  } catch(e) { console.error('Events load error', e); }
+  }
 }
 
 // ── Geofences ─────────────────────────────────────────────────
@@ -568,7 +622,7 @@ function openEditModal(id) {
 }
 
 async function saveZone() {
-  const id   = document.getElementById('edit-id').value;
+  const id = document.getElementById('edit-id').value;
   const name = document.getElementById('edit-name').value;
   const lat  = document.getElementById('edit-lat').value;
   const lon  = document.getElementById('edit-lon').value;
@@ -578,9 +632,7 @@ async function saveZone() {
   await loadZones();
 }
 
-function closeModal() {
-  document.getElementById('edit-modal').classList.remove('open');
-}
+function closeModal() { document.getElementById('edit-modal').classList.remove('open'); }
 
 // ── Settings ──────────────────────────────────────────────────
 const SETTING_META = {
@@ -597,8 +649,7 @@ const SETTING_META = {
 async function loadSettings() {
   try {
     const settings = await apiFetch({ action: 'get_settings' });
-    const list = document.getElementById('settings-list');
-    list.innerHTML = Object.entries(SETTING_META).map(([key, meta]) => `
+    document.getElementById('settings-list').innerHTML = Object.entries(SETTING_META).map(([key, meta]) => `
       <div class="setting-item">
         <div>
           <div class="setting-label">${meta.label}</div>
@@ -610,13 +661,12 @@ async function loadSettings() {
         </label>
       </div>
     `).join('');
-  } catch(e) { console.error('Settings load error', e); }
+  } catch(e) { console.error('Settings error', e); }
 }
 
 async function updateSetting(setting, enabled) {
-  try {
-    await apiPost({ action: 'update_setting', setting, enabled });
-  } catch(e) { console.error('Setting update error', e); }
+  try { await apiPost({ action: 'update_setting', setting, enabled }); }
+  catch(e) { console.error('Setting update error', e); }
 }
 
 // ── Helpers ───────────────────────────────────────────────────
