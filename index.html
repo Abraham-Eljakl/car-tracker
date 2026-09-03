@@ -182,7 +182,26 @@
         <button onclick="togglePlayback()" id="play-btn">▶ Play</button>
         <input type="range" class="playback-slider" id="playback-slider" min="0" value="0" oninput="seekPlayback(this.value)">
         <div class="playback-label" id="playback-label">Live view</div>
-      </div>
+        <input type="date" id="date-filter" style="
+          background: var(--bg);
+          border: 1px solid var(--border);
+          border-radius: 6px;
+          color: var(--text);
+          padding: 4px 8px;
+          font-size: 12px;
+          font-family: var(--mono);
+          outline: none;
+        " onchange="filterByDate(this.value)">
+        <button onclick="clearDateFilter()" style="
+        padding: 6px 10px;
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--text-dim);
+        border-radius: 6px;
+        font-size: 12px;
+        cursor: pointer;
+      ">Clear</button>
+    </div>
     </div>
 
     <div class="panel" id="tab-geofences">
