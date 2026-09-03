@@ -66,7 +66,6 @@
   .event-time { font-size: 10px; color: var(--text-dim); font-family: var(--mono); flex-shrink: 0; }
   #map { flex: 1; }
   .panel { display: none; flex-direction: column; flex: 1; overflow-y: auto; padding: 24px; gap: 20px; }
-  .panel.active { display: flex; }
   .panel-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
   .panel-card h2 { font-size: 14px; font-weight: 600; margin-bottom: 16px; letter-spacing: -0.2px; }
   .zone-list { display: flex; flex-direction: column; gap: 8px; }
@@ -103,6 +102,9 @@
   .playback-controls button { padding: 6px 12px; background: var(--accent-dim); border: 1px solid var(--accent); color: var(--accent); border-radius: 6px; font-size: 12px; cursor: pointer; font-family: var(--sans); }
   .playback-slider { flex: 1; accent-color: var(--accent); }
   .playback-label { font-family: var(--mono); font-size: 11px; color: var(--text-dim); min-width: 140px; text-align: right; }
+  .date-input { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text); padding: 4px 8px; font-size: 12px; font-family: var(--mono); outline: none; }
+  .clear-btn { padding: 5px 10px; background: transparent; border: 1px solid var(--border); color: var(--text-dim); border-radius: 6px; font-size: 12px; cursor: pointer; font-family: var(--sans); }
+  .clear-btn:hover { color: var(--text); border-color: var(--text-dim); }
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; }
   .modal-overlay.open { display: flex; }
   .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; width: 400px; max-width: 90vw; }
@@ -182,26 +184,9 @@
         <button onclick="togglePlayback()" id="play-btn">▶ Play</button>
         <input type="range" class="playback-slider" id="playback-slider" min="0" value="0" oninput="seekPlayback(this.value)">
         <div class="playback-label" id="playback-label">Live view</div>
-        <input type="date" id="date-filter" style="
-          background: var(--bg);
-          border: 1px solid var(--border);
-          border-radius: 6px;
-          color: var(--text);
-          padding: 4px 8px;
-          font-size: 12px;
-          font-family: var(--mono);
-          outline: none;
-        " onchange="filterByDate(this.value)">
-        <button onclick="clearDateFilter()" style="
-        padding: 6px 10px;
-        background: transparent;
-        border: 1px solid var(--border);
-        color: var(--text-dim);
-        border-radius: 6px;
-        font-size: 12px;
-        cursor: pointer;
-      ">Clear</button>
-    </div>
+        <input type="date" id="date-filter" class="date-input" onchange="filterByDate(this.value)">
+        <button class="clear-btn" onclick="clearDateFilter()">Clear</button>
+      </div>
     </div>
 
     <div class="panel" id="tab-geofences">
@@ -280,7 +265,7 @@ function login() {
   }
 }
 
-// ── JSONP fetch (bypasses CORS) ───────────────────────────────
+// ── JSONP fetch ───────────────────────────────────────────────
 function apiFetch(params) {
   return new Promise((resolve, reject) => {
     const cbName = 'cb_' + Date.now() + '_' + Math.random().toString(36).slice(2);
@@ -311,9 +296,7 @@ async function apiPost(body) {
       headers: { 'Content-Type': 'application/json' }
     });
     return r.json();
-  } catch(e) {
-    console.error('POST error', e);
-  }
+  } catch(e) { console.error('POST error', e); }
 }
 
 // ── Tab switching ─────────────────────────────────────────────
@@ -368,8 +351,37 @@ function updateMap(points) {
   const slider = document.getElementById('playback-slider');
   slider.max = coords.length - 1;
   if (!isPlaying) slider.value = coords.length - 1;
+
+  if (coords.length) map.fitBounds(routeLine.getBounds(), { padding: [20, 20] });
 }
 
+// ── Date filter ───────────────────────────────────────────────
+function filterByDate(dateStr) {
+  if (!dateStr) { clearDateFilter(); return; }
+
+  const filtered = gpsPoints.filter(p => {
+    const ts = p.gps_timestamp || p.timestamp;
+    if (!ts) return false;
+    const d = new Date(ts);
+    if (isNaN(d)) return false;
+    const pointDate = d.toISOString().split('T')[0];
+    return pointDate === dateStr;
+  });
+
+  if (!filtered.length) {
+    alert('No GPS points found for ' + dateStr);
+    return;
+  }
+
+  updateMap(filtered);
+}
+
+function clearDateFilter() {
+  document.getElementById('date-filter').value = '';
+  updateMap(gpsPoints);
+}
+
+// ── Playback ──────────────────────────────────────────────────
 function togglePlayback() {
   isPlaying = !isPlaying;
   document.getElementById('play-btn').textContent = isPlaying ? '⏸ Pause' : '▶ Play';
@@ -400,6 +412,7 @@ function seekPlayback(idx) {
   document.getElementById('playback-label').textContent = formatTime(p.gps_timestamp || p.timestamp) + ' · ' + (+p.speed_kmph || 0).toFixed(0) + ' km/h';
 }
 
+// ── Geofence circles ──────────────────────────────────────────
 function drawGeofenceCircles(zones) {
   geofenceCircles.forEach(c => map.removeLayer(c));
   geofenceCircles = [];
@@ -424,7 +437,12 @@ async function loadGpsData() {
   try {
     const data = await apiFetch({ action: 'get_gps' });
     gpsPoints = Array.isArray(data) ? data.filter(p => p.lat && p.lon) : [];
-    updateMap(gpsPoints);
+    const dateFilter = document.getElementById('date-filter').value;
+    if (dateFilter) {
+      filterByDate(dateFilter);
+    } else {
+      updateMap(gpsPoints);
+    }
   } catch(e) { console.error('GPS load error', e); }
 }
 
@@ -550,7 +568,7 @@ function openEditModal(id) {
 }
 
 async function saveZone() {
-  const id = document.getElementById('edit-id').value;
+  const id   = document.getElementById('edit-id').value;
   const name = document.getElementById('edit-name').value;
   const lat  = document.getElementById('edit-lat').value;
   const lon  = document.getElementById('edit-lon').value;
